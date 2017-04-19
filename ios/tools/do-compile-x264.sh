@@ -16,7 +16,6 @@
 #
 
 # This script is based on projects below
-# https://github.com/cxjwin/speex_libs/blob/master/speex-1.2rc2/build_speex_ios.sh
 
 #--------------------
 echo "===================="
@@ -60,19 +59,19 @@ FF_BUILD_ROOT=`pwd`
 FF_TAGET_OS="darwin"
 
 
-# speex build params
+# x264 build params
 export COMMON_FF_CFG_FLAGS=
 
-SPEEX_CFG_FLAGS=
-SPEEX_EXTRA_CFLAGS=
-SPEEX_CFG_CPU=
+X264_CFG_FLAGS=
+X264_EXTRA_CFLAGS=
+X264_CFG_CPU=
 
 # i386, x86_64
-SPEEX_CFG_FLAGS_SIMULATOR=
+X264_CFG_FLAGS_SIMULATOR=
 
 # armv7, armv7s, arm64
-SPEEX_CFG_FLAGS_ARM=
-SPEEX_CFG_FLAGS_ARM="--host=arm-apple-darwin"
+X264_CFG_FLAGS_ARM=
+X264_CFG_FLAGS_ARM="--host=arm-apple-darwin"
 
 echo "build_root: $FF_BUILD_ROOT"
 
@@ -87,27 +86,27 @@ FF_XCRUN_OSVERSION=
 FF_GASPP_EXPORT=
 
 if [ "$FF_ARCH" = "i386" ]; then
-    FF_BUILD_NAME="speexdsp-i386"
+    FF_BUILD_NAME="x264-i386"
     FF_XCRUN_PLATFORM="iPhoneSimulator"
     FF_XCRUN_OSVERSION="-mios-simulator-version-min=6.0"
 elif [ "$FF_ARCH" = "x86_64" ]; then
-    FF_BUILD_NAME="speexdsp-x86_64"
+    FF_BUILD_NAME="x264-x86_64"
     FF_XCRUN_PLATFORM="iPhoneSimulator"
     FF_XCRUN_OSVERSION="-mios-simulator-version-min=7.0"
 elif [ "$FF_ARCH" = "armv7" ]; then
-    FF_BUILD_NAME="speexdsp-armv7"
+    FF_BUILD_NAME="x264-armv7"
     FF_XCRUN_OSVERSION="-miphoneos-version-min=6.0"
-    SPEEX_CFG_FLAGS="--disable-neon $SPEEX_CFG_FLAGS_ARM $SPEEX_CFG_FLAGS"
+    X264_CFG_FLAGS="--disable-neon $X264_CFG_FLAGS_ARM $X264_CFG_FLAGS"
 #    OPENSSL_CFG_CPU="--cpu=cortex-a8"
 elif [ "$FF_ARCH" = "armv7s" ]; then
-    FF_BUILD_NAME="speexdsp-armv7s"
-    SPEEX_CFG_CPU="--cpu=swift"
+    FF_BUILD_NAME="x264-armv7s"
+    X264_CFG_CPU="--cpu=swift"
     FF_XCRUN_OSVERSION="-miphoneos-version-min=6.0"
-    SPEEX_CFG_FLAGS="--disable-neon $SPEEX_CFG_FLAGS_ARM $SPEEX_CFG_FLAGS"
+    X264_CFG_FLAGS="--disable-neon $X264_CFG_FLAGS_ARM $X264_CFG_FLAGS"
 elif [ "$FF_ARCH" = "arm64" ]; then
-    FF_BUILD_NAME="speexdsp-arm64"
+    FF_BUILD_NAME="x264-arm64"
     FF_XCRUN_OSVERSION="-miphoneos-version-min=7.0"
-    SPEEX_CFG_FLAGS="--disable-neon $SPEEX_CFG_FLAGS_ARM $SPEEX_CFG_FLAGS"
+    X264_CFG_FLAGS="--disable-neon $X264_CFG_FLAGS_ARM $X264_CFG_FLAGS"
     FF_GASPP_EXPORT="GASPP_FIX_XCODE5=1"
 else
     echo "unknown architecture $FF_ARCH";
@@ -149,10 +148,10 @@ echo "CC: $CC"
 
 #--------------------
 echo "\n--------------------"
-echo "[*] configurate speexdsp"
+echo "[*] configurate x264"
 echo "--------------------"
 
-SPEEX_CFG_FLAGS="$SPEEX_CFG_FLAGS --prefix=$FF_BUILD_PREFIX"
+X264_CFG_FLAGS="$X264_CFG_FLAGS --prefix=$FF_BUILD_PREFIX"
 
 # xcode configuration
 export DEBUG_INFORMATION_FORMAT=dwarf-with-dsym
@@ -162,23 +161,23 @@ if [ -f "./Makefile" ]; then
     echo 'reuse configure'
 elif [ -f "./configure" ]; then
     echo 'already run autogen.sh'
-    echo "config: $SPEEX_CFG_FLAGS"
+    echo "config: $X264_CFG_FLAGS"
     ./Configure \
-        $SPEEX_CFG_FLAGS
+        $X264_CFG_FLAGS
     make clean
 else
     echo 'should run autogen.sh first'
     ./autogen.sh
 
-    echo "config: $SPEEX_CFG_FLAGS"
+    echo "config: $X264_CFG_FLAGS"
     ./Configure \
-        $SPEEX_CFG_FLAGS
+        $X264_CFG_FLAGS
     make clean
 fi
 
 #--------------------
 echo "\n--------------------"
-echo "[*] compile speexdsp"
+echo "[*] compile x264"
 echo "--------------------"
 set +e
 make

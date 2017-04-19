@@ -18,7 +18,7 @@
 #----------
 # modify for your build tool
 
-FF_ALL_SH="ogg speex speexdsp openssl ffmpeg"
+FF_ALL_SH="x264 openssl ffmpeg"
 
 #----------
 UNI_BUILD_ROOT=`pwd`

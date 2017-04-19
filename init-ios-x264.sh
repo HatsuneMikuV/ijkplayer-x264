@@ -15,23 +15,23 @@
 # limitations under the License.
 #
 
-IJK_OGG_UPSTREAM=https://github.com/xiph/ogg.git
-IJK_OGG_FORK=https://github.com/xiph/ogg.git
-IJK_OGG_COMMIT=v1.3.2
-IJK_OGG_LOCAL_REPO=extraSpeex/ogg
+IJK_X264_UPSTREAM=https://github.com/HatsuneMikuV/x264.git
+IJK_X264_FORK=https://github.com/HatsuneMikuV/x264.git
+IJK_X264_COMMIT=X264
+IJK_X264_LOCAL_REPO=extraX264/x264
 
 set -e
 TOOLS=tools
 
-echo "== pull ogg base =="
-sh $TOOLS/pull-repo-base.sh $IJK_OGG_UPSTREAM $IJK_OGG_LOCAL_REPO
+echo "== pull x264 base =="
+sh $TOOLS/pull-repo-base.sh $IJK_X264_UPSTREAM $IJK_X264_LOCAL_REPO
 
 function pull_fork()
 {
-    echo "== pull ogg fork $1 =="
-    sh $TOOLS/pull-repo-ref.sh $IJK_OGG_FORK ios/ogg-$1 ${IJK_OGG_LOCAL_REPO}
-    cd ios/ogg-$1
-    git checkout ${IJK_OGG_COMMIT} -B ijkplayer
+    echo "== pull x264 fork $1 =="
+    sh $TOOLS/pull-repo-ref.sh $IJK_X264_FORK ios/x264-$1 ${IJK_X264_LOCAL_REPO}
+    cd ios/x264-$1
+    git checkout ${IJK_X264_COMMIT} -B ijkplayer
     cd -
 }
 
