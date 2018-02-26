@@ -17,7 +17,7 @@
 
 IJK_X264_UPSTREAM=https://github.com/HatsuneMikuV/x264.git
 IJK_X264_FORK=https://github.com/HatsuneMikuV/x264.git
-IJK_X264_COMMIT=X264
+IJK_X264_COMMIT=X264-1.0.0
 IJK_X264_LOCAL_REPO=extraX264/x264
 
 set -e
