@@ -73,6 +73,9 @@ X264_CFG_FLAGS_SIMULATOR=
 X264_CFG_FLAGS_ARM=
 X264_CFG_FLAGS_ARM="--host=arm-apple-darwin"
 
+CONFIGURE_FLAGS="--enable-static --enable-pic --disable-cli"
+
+
 echo "build_root: $FF_BUILD_ROOT"
 
 #--------------------
@@ -89,6 +92,7 @@ if [ "$FF_ARCH" = "i386" ]; then
     FF_BUILD_NAME="x264-i386"
     FF_XCRUN_PLATFORM="iPhoneSimulator"
     FF_XCRUN_OSVERSION="-mios-simulator-version-min=6.0"
+    X264_CFG_FLAGS_ARM="--host=i386-apple-darwin"
 elif [ "$FF_ARCH" = "x86_64" ]; then
     FF_BUILD_NAME="x264-x86_64"
     FF_XCRUN_PLATFORM="iPhoneSimulator"
@@ -96,17 +100,18 @@ elif [ "$FF_ARCH" = "x86_64" ]; then
 elif [ "$FF_ARCH" = "armv7" ]; then
     FF_BUILD_NAME="x264-armv7"
     FF_XCRUN_OSVERSION="-miphoneos-version-min=6.0"
-    X264_CFG_FLAGS="--disable-neon $X264_CFG_FLAGS_ARM $X264_CFG_FLAGS"
+    X264_CFG_FLAGS="--disable-asm $X264_CFG_FLAGS_ARM $X264_CFG_FLAGS"
 #    OPENSSL_CFG_CPU="--cpu=cortex-a8"
 elif [ "$FF_ARCH" = "armv7s" ]; then
     FF_BUILD_NAME="x264-armv7s"
     X264_CFG_CPU="--cpu=swift"
     FF_XCRUN_OSVERSION="-miphoneos-version-min=6.0"
-    X264_CFG_FLAGS="--disable-neon $X264_CFG_FLAGS_ARM $X264_CFG_FLAGS"
+    X264_CFG_FLAGS="--disable-asm $X264_CFG_FLAGS_ARM $X264_CFG_FLAGS"
 elif [ "$FF_ARCH" = "arm64" ]; then
     FF_BUILD_NAME="x264-arm64"
     FF_XCRUN_OSVERSION="-miphoneos-version-min=7.0"
-    X264_CFG_FLAGS="--disable-neon $X264_CFG_FLAGS_ARM $X264_CFG_FLAGS"
+    X264_CFG_FLAGS_ARM="--host=aarch64-apple-darwin"
+    X264_CFG_FLAGS="--disable-asm $X264_CFG_FLAGS_ARM $X264_CFG_FLAGS"
     FF_GASPP_EXPORT="GASPP_FIX_XCODE5=1"
 else
     echo "unknown architecture $FF_ARCH";
@@ -157,20 +162,22 @@ X264_CFG_FLAGS="$X264_CFG_FLAGS --prefix=$FF_BUILD_PREFIX"
 export DEBUG_INFORMATION_FORMAT=dwarf-with-dsym
 
 cd $FF_BUILD_SOURCE
-if [ -f "./Makefile" ]; then
-    echo 'reuse configure'
-elif [ -f "./configure" ]; then
+if [ -f "./configure" ]; then
     echo 'already run autogen.sh'
     echo "config: $X264_CFG_FLAGS"
     ./Configure \
+        $CONFIGURE_FLAGS \
         $X264_CFG_FLAGS
     make clean
+elif [ -f "./Makefile" ]; then
+    echo 'reuse configure'
 else
     echo 'should run autogen.sh first'
     ./autogen.sh
 
     echo "config: $X264_CFG_FLAGS"
     ./Configure \
+        $CONFIGURE_FLAGS \
         $X264_CFG_FLAGS
     make clean
 fi
